@@ -1,0 +1,345 @@
+{% extends 'annotator/base.html' %}
+{% load static %}
+{% block title %}Your Images - YOLO Annotation Tool{% endblock %}
+
+{% block sidebar_toggle %}
+<!-- Sidebar Toggle Button -->
+<button id="sidebar-toggle-button" class="sidebar-toggle-button">
+    &#9776;
+</button>
+{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Home Page</h1>
+
+    <!-- Dashboard Sidebar -->
+    <div id="dashboard-sidebar" class="dashboard-sidebar">
+        <div class="dashboard-content">
+            <h2>Dashboard</h2>
+
+            {% if not user.is_staff %}
+                <!-- User Dashboard -->
+                <p><strong>Total Images:</strong> {{ total_images }}</p>
+                <p><strong>Annotated Images:</strong> {{ annotated_images_count }} ({{ annotated_percentage|floatformat:0 }}%)</p>
+                <p><strong>Approved Images:</strong> {{ approved_images_count }} ({{ approved_percentage|floatformat:0 }}%)</p>
+                <p><strong>Rejected Images:</strong> {{ rejected_images_count }} ({{ rejected_percentage|floatformat:0 }}%)</p>
+            {% else %}
+                <!-- Admin Dashboard -->
+                <h3>Overall Statistics</h3>
+                <p><strong>Total Images:</strong> {{ overall_total_images }}</p>
+                <p><strong>Annotated Images:</strong> {{ overall_annotated_images_count }} ({{ overall_annotated_percentage|floatformat:0 }}%)</p>
+                <p><strong>Approved Images:</strong> {{ overall_approved_images_count }} ({{ overall_approved_percentage|floatformat:0 }}%)</p>
+                <p><strong>Rejected Images:</strong> {{ overall_rejected_images_count }} ({{ overall_rejected_percentage|floatformat:0 }}%)</p>
+
+                <h3>User Statistics</h3>
+                {% for user_stat in user_stats %}
+                    <div class="user-stat">
+                        <p><strong>User:</strong> {{ user_stat.username }}</p>
+                        <p><strong>Total Images:</strong> {{ user_stat.total_images }}</p>
+                        <p><strong>Annotated Images:</strong> {{ user_stat.annotated_images_count }} ({{ user_stat.annotated_percentage|floatformat:0 }}%)</p>
+                        <p><strong>Approved Images:</strong> {{ user_stat.approved_images_count }} ({{ user_stat.approved_percentage|floatformat:0 }}%)</p>
+                        <p><strong>Rejected Images:</strong> {{ user_stat.rejected_images_count }} ({{ user_stat.rejected_percentage|floatformat:0 }}%)</p>
+                    </div>
+                    {% if not forloop.last %}
+                        <hr>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Display Messages -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- Bulk Upload and Add User Sections for Admin Users -->
+    {% if user.is_staff %}
+    <div class="admin-sections">
+        <!-- Bulk Upload Button -->
+        <div class="bulk-upload-button-container">
+            <button id="openBulkUploadModal" class="annotate-button">Upload Images</button>
+        </div>
+    
+        <!-- Add User Button -->
+        <div class="add-user-button-container">
+            <button id="openAddUserModal" class="annotate-button">Add User</button>
+        </div>
+    
+        <!-- Download Annotations Button -->
+        <div class="download-annotations-button-container">
+            <button id="openDownloadAnnotationsModal" class="annotate-button">Download Annotations</button>
+        </div>
+    </div>
+
+    <!-- Bulk Upload Modal -->
+    <div id="bulkUploadModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Bulk Upload Images</h2>
+            <form method="post" enctype="multipart/form-data" class="bulk-upload-form" action="{% url 'image_list' %}">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="bulk_upload">
+                <div class="form-group">
+                    {{ bulk_form.user.label_tag }}
+                    {{ bulk_form.user }}
+                    {% if bulk_form.user.errors %}
+                        <ul class="error-list">
+                            {% for error in bulk_form.user.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ bulk_form.images.label_tag }}
+                    {{ bulk_form.images }}
+                    {% if bulk_form.images.errors %}
+                        <ul class="error-list">
+                            {% for error in bulk_form.images.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <button type="submit" class="annotate-button">Upload Images</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Add New User</h2>
+            <form method="post" class="add-user-form" action="{% url 'image_list' %}">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="add_user">
+                <div class="form-group">
+                    {{ add_user_form.username.label_tag }}
+                    {{ add_user_form.username }}
+                    {% if add_user_form.username.errors %}
+                        <ul class="error-list">
+                            {% for error in add_user_form.username.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ add_user_form.password.label_tag }}
+                    {{ add_user_form.password }}
+                    {% if add_user_form.password.errors %}
+                        <ul class="error-list">
+                            {% for error in add_user_form.password.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ add_user_form.password_confirm.label_tag }}
+                    {{ add_user_form.password_confirm }}
+                    {% if add_user_form.password_confirm.errors %}
+                        <ul class="error-list">
+                            {% for error in add_user_form.password_confirm.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <div class="form-group checkbox-group">
+                    {{ add_user_form.is_staff }}
+                    {{ add_user_form.is_staff.label_tag }}
+                    {% if add_user_form.is_staff.errors %}
+                        <ul class="error-list">
+                            {% for error in add_user_form.is_staff.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <button type="submit" class="annotate-button">Create User</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Download Annotations Modal -->
+    <div id="downloadAnnotationsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Download Annotations</h2>
+            <form method="post" class="download-annotations-form" action="{% url 'download_annotations' %}">
+                {% csrf_token %}
+                {{ download_form.user.label_tag }}
+                {{ download_form.user }}
+                {% if download_form.user.errors %}
+                    <ul class="error-list">
+                        {% for error in download_form.user.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <button type="submit" class="annotate-button">Download</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Filter Section -->
+    <div class="filter-container">
+        <form method="get" action="{% url 'image_list' %}" class="filter-form">
+            <h2 class="filter-title">Filter by Status</h2>
+            <div class="filter-group">
+                <select name="status" id="status-filter">
+                    <option value="all" {% if current_status == 'all' %}selected{% endif %}>All</option>
+                    <option value="uploaded" {% if current_status == 'uploaded' %}selected{% endif %}>Unannotated</option>
+                    <option value="annotated" {% if current_status == 'annotated' %}selected{% endif %}>Annotated</option>
+                    <option value="approved" {% if current_status == 'approved' %}selected{% endif %}>Approved</option>
+                    <option value="rejected" {% if current_status == 'rejected' %}selected{% endif %}>Rejected</option>
+                </select>
+                <button type="submit" class="annotate-button">Filter</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Image List Section -->
+    <div class="image-list-container">
+        {% for image in images %}
+        <div class="image-item">
+            <img src="{% url 'serve_protected_image' image.image.name %}" alt="Image {{ image.id }}" class="image-thumbnail">
+            <div class="image-details">
+                <p><strong>Image ID:</strong> {{ image.id }}</p>
+                <p><strong>Uploaded on:</strong> {{ image.uploaded_at|date:"F d, Y, P" }}</p>
+                <span class="status-label {{ image.status|lower }}">{{ image.get_status_display }}</span>
+                <a href="{% url 'annotate_image' image.id %}" class="annotate-button">Annotate</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No images uploaded yet.</p>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Bulk Upload Modal Elements
+    const bulkModal = document.getElementById('bulkUploadModal');
+    const openBulkModalBtn = document.getElementById('openBulkUploadModal');
+    const bulkCloseBtn = bulkModal ? bulkModal.querySelector('.close-button') : null;
+
+    // Add User Modal Elements
+    const addUserModal = document.getElementById('addUserModal');
+    const openAddUserBtn = document.getElementById('openAddUserModal');
+    const addUserCloseBtn = addUserModal ? addUserModal.querySelector('.close-button') : null;
+
+    // Download Annotations Modal Elements
+    const downloadAnnotationsModal = document.getElementById('downloadAnnotationsModal');
+    const openDownloadAnnotationsBtn = document.getElementById('openDownloadAnnotationsModal');
+    const downloadAnnotationsCloseBtn = downloadAnnotationsModal ? downloadAnnotationsModal.querySelector('.close-button') : null;
+
+    // Function to open modal
+    function openModal(modal) {
+        if (modal) {
+            modal.style.display = 'block';
+        }
+    }
+
+    // Function to close modal
+    function closeModal(modal) {
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // Open Bulk Upload Modal
+    if (openBulkModalBtn) {
+        openBulkModalBtn.addEventListener('click', () => {
+            openModal(bulkModal);
+        });
+    }
+
+    // Close Bulk Upload Modal
+    if (bulkCloseBtn) {
+        bulkCloseBtn.addEventListener('click', () => {
+            closeModal(bulkModal);
+        });
+    }
+
+    // Open Add User Modal
+    if (openAddUserBtn) {
+        openAddUserBtn.addEventListener('click', () => {
+            openModal(addUserModal);
+        });
+    }
+
+    // Close Add User Modal
+    if (addUserCloseBtn) {
+        addUserCloseBtn.addEventListener('click', () => {
+            closeModal(addUserModal);
+        });
+    }
+
+    // Open Download Annotations Modal
+    if (openDownloadAnnotationsBtn) {
+        openDownloadAnnotationsBtn.addEventListener('click', () => {
+            openModal(downloadAnnotationsModal);
+        });
+    }
+
+    // Close Download Annotations Modal
+    if (downloadAnnotationsCloseBtn) {
+        downloadAnnotationsCloseBtn.addEventListener('click', () => {
+            closeModal(downloadAnnotationsModal);
+        });
+    }
+
+    // Close modals when clicking outside the modal content
+    window.addEventListener('click', (event) => {
+        if (event.target == bulkModal) {
+            closeModal(bulkModal);
+        }
+        if (event.target == addUserModal) {
+            closeModal(addUserModal);
+        }
+        if (event.target == downloadAnnotationsModal) {
+            closeModal(downloadAnnotationsModal);
+        }
+    });
+
+    // Close modals on pressing the Escape key
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            if (bulkModal && bulkModal.style.display === 'block') {
+                closeModal(bulkModal);
+            }
+            if (addUserModal && addUserModal.style.display === 'block') {
+                closeModal(addUserModal);
+            }
+            if (downloadAnnotationsModal && downloadAnnotationsModal.style.display === 'block') {
+                closeModal(downloadAnnotationsModal);
+            }
+        }
+    });
+
+    // Sidebar Toggle
+    const sidebar = document.getElementById('dashboard-sidebar');
+    const toggleButton = document.getElementById('sidebar-toggle-button');
+
+    if (toggleButton) {
+        toggleButton.addEventListener('click', function() {
+            if (sidebar) {
+                sidebar.classList.toggle('open');
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

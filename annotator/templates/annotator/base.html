@@ -1,0 +1,49 @@
+<!-- annotator/templates/annotator/base.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}YOLO Annotation Tool{% endblock %}</title>
+    {% load static %}
+    <!-- Google Fonts for High-Tech Aesthetic -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <!-- Sidebar Toggle Button Block -->
+            {% block sidebar_toggle %}
+            <!-- Default: No toggle button -->
+            {% endblock %}
+            
+            <!-- Left Section: Hello, User -->
+            <div class="header-left">
+                
+            </div>
+            
+            <!-- Center Section: Logo/Title -->
+            <div class="logo">
+                YOLO Annotation Tool
+            </div>
+            
+            <!-- Right Section: Navigation Links -->
+            <nav class="nav">
+                <ul class="nav-links">
+                    <span class="greeting">Hello, {{ user.username }}</span>
+                    <li><a href="{% url 'image_list' %}" class="nav-link">Home</a></li>
+                    {% if user.is_staff %}
+                        <li><a href="{% url 'annotated_images' %}" class="nav-link">Admin Dashboard</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'logout' %}" class="nav-link">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    {% block content %}{% endblock %}
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

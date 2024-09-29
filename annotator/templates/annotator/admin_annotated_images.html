@@ -1,0 +1,151 @@
+<!-- annotator/templates/annotator/admin_annotated_images.html -->
+{% extends 'annotator/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/admin_styles.css' %}">
+{% endblock %}
+
+{% block title %}Admin - Annotated Images{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Annotated Images for Admin Approval</h1>
+    <div class="annotated-images-container">
+        {% for image in annotated_images %}
+            <div class="annotated-image-item">
+                <!-- Display the annotated image -->
+                {% if image.image.name %}
+                    <img 
+                        class="annotated-image" 
+                        src="{% url 'serve_annotated_image' image.id %}" 
+                        alt="Annotated Image {{ image.id }}" 
+                        width="500">
+                {% else %}
+                    <p>No image available for Image ID: {{ image.id }}</p>
+                {% endif %}
+                <div class="annotated-image-details">
+                    <p><strong>Image ID:</strong> {{ image.id }}</p>
+                    <p><strong>User:</strong> {{ image.user.username }}</p>
+                    <p><strong>Uploaded on:</strong> {{ image.uploaded_at|date:"F d, Y, P" }}</p>
+                    <!-- Admin actions -->
+                    <div class="admin-actions">
+                        <button class="approve-button" data-image-id="{{ image.id }}">
+                            Approve
+                        </button>
+                        <button class="reject-button" data-image-id="{{ image.id }}">
+                            Reject
+                        </button>
+                        <a href="{% url 'annotate_image' image.id %}" class="annotate-button">
+                            Annotate
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No annotated images pending approval.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination Controls (If Implemented) -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const approveButtons = document.querySelectorAll('.approve-button');
+    const rejectButtons = document.querySelectorAll('.reject-button');
+
+    approveButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const imageId = this.getAttribute('data-image-id');
+            if(confirm('Are you sure you want to approve this image?')) {
+                fetch(`/annotate-admin/approve/${imageId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ 'image_id': imageId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.status === 'success') {
+                        alert('Image approved successfully.');
+                        location.reload();
+                    } else {
+                        alert('Failed to approve image.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred.');
+                });
+            }
+        });
+    });
+
+    rejectButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const imageId = this.getAttribute('data-image-id');
+            if(confirm('Are you sure you want to reject this image?')) {
+                fetch(`/annotate-admin/reject/${imageId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ 'image_id': imageId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.status === 'success') {
+                        alert('Image rejected successfully.');
+                        location.reload();
+                    } else {
+                        alert('Failed to reject image.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred.');
+                });
+            }
+        });
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (const cookie of cookies) {
+                const trimmedCookie = cookie.trim();
+                if (trimmedCookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(trimmedCookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+{% endblock %}

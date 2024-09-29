@@ -1,0 +1,1171 @@
+/* static/css/styles.css */
+
+/* ----------------------------
+   CSS Variables for Consistency
+----------------------------- */
+:root {
+    --primary-color: #ffa500; /* Orange */
+    --secondary-color: #e0e0e0; /* Light grey */
+    --background-color: #121212; /* Deep black */
+    --text-color: #e0e0e0;
+    --button-hover-color: #e69500;
+    --error-color: #dc3545;
+    --success-color: #28a745;
+    --primary-color-rgb: 255, 165, 0; /* For rgba usage */
+    --font-primary: 'Roboto', sans-serif;
+    --font-high-tech: 'Orbitron', sans-serif;
+    --header-height: 80px;
+}
+
+/* ----------------------------
+   Global Styles
+----------------------------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: var(--header-height) 0 0 0; /* Updated to use header height */
+    padding: 0;
+    background-color: var(--background-color); /* Deep black background */
+    color: var(--text-color); /* Light grey text for contrast */
+    font-family: var(--font-primary); /* Modern sans-serif font */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px; /* Removed top padding since body now has margin-top */
+    box-sizing: border-box;
+}
+/* ----------------------------
+   Header Styles
+----------------------------- */
+.header {
+    width: 100%;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--primary-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensure header is on top */
+    height: var(--header-height);
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 0 0; /* top:0, right:20px, bottom:0, left:0 */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative; /* For positioning nav to the right */
+    height: 100%; /* Ensure it takes full height of header */
+}
+
+/* Left Section: Hello, User */
+.header-left {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.greeting {
+    font-family: var(--font-primary);
+    font-weight: 500;
+}
+
+/* Center Section: Logo/Title */
+.logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--primary-color); /* Orange color for logo */
+    font-size: 2.5rem; /* Increased font size for larger title */
+    font-family: var(--font-high-tech); /* Futuristic font */
+    margin: 0;
+    white-space: nowrap; /* Prevent text wrapping */
+    text-shadow: 0 0 10px rgba(var(--primary-color-rgb), 0.7), 0 0 20px rgba(var(--primary-color-rgb), 0.5);
+    transition: transform 0.3s;
+}
+
+.logo:hover {
+    transform: translateX(-50%) scale(1.05);
+    text-shadow: 0 0 15px rgba(var(--primary-color-rgb), 0.9), 0 0 25px rgba(var(--primary-color-rgb), 0.7);
+}
+
+
+/* Navigation Styles */
+/* Navigation Styles */
+.nav {
+    /* No additional positioning needed since justify-content is space-between */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    align-items: center; /* Vertically center items */
+}
+
+.nav-links li {
+    position: relative;
+}
+
+.nav-link {
+    color: var(--text-color); /* Light grey text */
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s, transform 0.2s;
+    font-family: var(--font-primary);
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between icon and text */
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.nav-link:hover {
+    color: var(--primary-color); /* Orange on hover */
+    background-color: rgba(var(--primary-color-rgb), 0.1); /* Light orange background on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.nav-link.active {
+    color: var(--primary-color); /* Orange color for active link */
+    font-weight: 500;
+    background-color: rgba(var(--primary-color-rgb), 0.2);
+}
+/* ----------------------------
+   Toolbar Styles
+----------------------------- */
+.toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(30, 30, 30, 0.8); /* Semi-transparent dark grey */
+    backdrop-filter: blur(10px); /* Glassmorphism effect */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.toolbar select,
+.toolbar button {
+    margin: 0 5px;
+    padding: 10px 15px;
+    background-color: #2c2c2c; /* Dark grey buttons */
+    border: none;
+    border-radius: 5px;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.2s, color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between icon and text */
+}
+
+.toolbar select {
+    background-color: #3a3a3a; /* Slightly lighter grey for select */
+    appearance: none; /* Remove default arrow */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"><polygon points="0,0 10,0 5,5" fill="%23e0e0e0"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 8px center; /* Adjusted position */
+    background-size: 10px 5px;
+    cursor: pointer;
+}
+
+.toolbar select:hover {
+    background-color: #4a4a4a;
+}
+
+.toolbar button.annotate-button {
+    padding: 8px 12px; /* Reduced padding for compactness */
+    font-size: 0.9rem; /* Slightly smaller font */
+}
+
+.toolbar button:hover,
+.toolbar select:hover {
+    background-color: var(--primary-color); /* Orange on hover */
+    color: #121212; /* Dark text on hover for contrast */
+    transform: translateY(-1px); /* Slight upward movement */
+}
+
+.toolbar button:active,
+.toolbar select:active {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.toolbar button:disabled,
+.toolbar select:disabled {
+    background-color: #555555;
+    cursor: not-allowed;
+    color: #888888;
+}
+
+/* ----------------------------
+   Filter Container Styles
+----------------------------- */
+.filter-container {
+    width: 100%;
+    max-width: 300px; /* Reduced max-width for compactness */
+    margin: 0 auto 20px auto; /* Center the filter and add bottom margin */
+}
+
+.filter-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Stack elements vertically */
+}
+
+.filter-title {
+    font-size: 1rem;
+    margin-bottom: 8px; /* Space between title and filter group */
+    text-align: center;
+    color: var(--text-color);
+    font-family: var(--font-primary);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Add space between elements */
+    width: 100%;
+}
+
+.filter-group select {
+    flex: 1;
+    padding: 8px 10px; /* Reduced padding */
+    border: 1px solid #555555;
+    border-radius: 4px; /* Slightly reduced border-radius */
+    background-color: #2c2c2c;
+    color: var(--text-color);
+    font-family: var(--font-primary);
+    font-size: 0.9rem; /* Slightly smaller font */
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"><polygon points="0,0 10,0 5,5" fill="%23e0e0e0"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 8px center; /* Adjusted position */
+    background-size: 10px 5px;
+    cursor: pointer;
+}
+
+.filter-group select:hover {
+    background-color: #3a3a3a;
+}
+
+.filter-group button.annotate-button {
+    padding: 8px 10px; /* Reduced padding */
+    font-size: 0.9rem; /* Slightly smaller font */
+    border-radius: 4px; /* Slightly reduced border-radius */
+    background-color: var(--primary-color); /* Ensure button has primary color */
+    color: #121212; /* Dark text for contrast */
+}
+
+.filter-group button.annotate-button:hover {
+    background-color: var(--button-hover-color); /* Darker orange on hover */
+    color: #fff; /* Light text on hover */
+    transform: translateY(-1px); /* Slight upward movement */
+}
+
+.filter-group button.annotate-button:active {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* ----------------------------
+   Image List Page Styles
+----------------------------- */
+.image-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding-bottom: 20px; /* Added padding to prevent overlap with footer */
+}
+
+.image-item {
+    background: rgba(30, 30, 30, 0.8); /* Semi-transparent dark grey */
+    border: 2px solid var(--primary-color); /* Orange border */
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+    width: 300px; /* Fixed width for consistency */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.image-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.9);
+}
+
+.image-thumbnail {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.image-details {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.image-details p {
+    margin: 0;
+    color: var(--text-color);
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+}
+
+.image-details p strong {
+    color: var(--primary-color); /* Orange color for labels */
+}
+
+.status-label {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #fff;
+    font-family: var(--font-primary);
+    margin-bottom: 10px;
+}
+
+.status-label.unannotated {
+    background-color: #555555; /* Grey */
+}
+
+.status-label.annotated {
+    background-color: #007bff; /* Blue */
+}
+
+.status-label.approved {
+    background-color: var(--success-color); /* Green */
+}
+
+.status-label.rejected {
+    background-color: var(--error-color); /* Red */
+}
+
+.annotate-button {
+    width: auto; /* Changed from 100% to auto */
+    padding: 10px 20px; /* Adjusted padding */
+    background-color: var(--primary-color); /* Orange background */
+    color: #121212; /* Dark text */
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-family: var(--font-primary);
+    display: inline-flex; /* Changed to inline-flex for better sizing */
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: background-color 0.3s, transform 0.2s, color 0.3s;
+    cursor: pointer;
+}
+
+.annotate-button:hover {
+    background-color: var(--button-hover-color); /* Darker orange on hover */
+    color: #fff; /* Light text on hover */
+    transform: translateY(-2px);
+}
+
+.annotate-button:active {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* ----------------------------
+   Admin Sections Styles
+----------------------------- */
+.admin-sections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+
+.bulk-upload-button-container,
+.add-user-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bulk-upload-button-container .annotate-button,
+.add-user-button-container .annotate-button {
+    padding: 10px 20px;
+    width: auto; /* Changed from fixed width to auto */
+    text-align: center;
+    font-size: 1rem;
+}
+
+.bulk-upload-button-container .annotate-button:hover,
+.add-user-button-container .annotate-button:hover {
+    background-color: var(--button-hover-color);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* ----------------------------
+   Modal Styles
+----------------------------- */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1001; /* Sit above header */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #2c2c2c;
+    margin: 5% auto; /* Reduced margin for better mobile view */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%; /* More responsive */
+    max-width: 500px;
+    border-radius: 10px;
+    position: relative;
+    color: var(--text-color);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.close-button {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    color: var(--primary-color);
+    font-family: var(--font-high-tech);
+    margin-bottom: 15px;
+}
+
+.modal-content .form-group {
+    margin-bottom: 15px;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="password"],
+.modal-content select,
+.modal-content input[type="file"],
+.modal-content input[type="checkbox"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #555555;
+    border-radius: 5px;
+    background-color: #2c2c2c;
+    color: var(--text-color);
+    font-family: var(--font-primary);
+    box-sizing: border-box;
+}
+
+.modal-content input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.modal-content .error-list {
+    color: var(--error-color);
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.modal-content button.annotate-button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+/* ----------------------------
+   Messages Styles
+----------------------------- */
+.messages {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.messages li {
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-family: var(--font-primary);
+}
+
+.messages li.success {
+    background-color: var(--success-color);
+    color: #121212;
+}
+
+.messages li.error {
+    background-color: var(--error-color);
+    color: #fff;
+}
+
+.messages li.warning {
+    background-color: #ffc107; /* Amber */
+    color: #121212;
+}
+
+.messages li.info {
+    background-color: #17a2b8; /* Teal */
+    color: #fff;
+}
+
+/* ----------------------------
+   Footer Styles
+----------------------------- */
+.footer {
+    background: rgba(30, 30, 30, 0.9); /* Semi-transparent dark grey */
+    backdrop-filter: blur(10px); /* Glassmorphism effect */
+    border-top: 2px solid var(--primary-color); /* Orange top border */
+    color: var(--text-color);
+    text-align: center;
+    padding: 15px 20px;
+    font-size: 0.9rem;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.5);
+    font-family: var(--font-primary);
+}
+
+/* ----------------------------
+   Scrollbar Styles (Webkit Browsers)
+----------------------------- */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e1e1e;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #555555;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* ----------------------------
+   High-Tech Aesthetic Enhancements
+----------------------------- */
+
+/* Pulse Animation for Selected Annotation */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 5px var(--primary-color);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--primary-color);
+    }
+    100% {
+        box-shadow: 0 0 5px var(--primary-color);
+    }
+}
+
+/* Glassmorphism Effect for UI Components */
+.toolbar,
+#annotations-list,
+.nav,
+.header {
+    background: rgba(30, 30, 30, 0.8); /* Semi-transparent dark grey */
+    backdrop-filter: blur(10px); /* Blur effect */
+    border: 1px solid rgba(var(--primary-color-rgb), 0.3); /* Orange semi-transparent border */
+}
+
+/* Button Icons (Assuming using Font Awesome or similar) */
+.toolbar button i,
+.nav .nav-link i,
+.annotation-actions button i {
+    margin-right: 5px;
+    color: inherit;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .image-list-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-item {
+        width: 90%;
+    }
+
+    .logo {
+        font-size: 2rem; /* Smaller font size on mobile */
+    }
+
+    .nav-links {
+        gap: 10px;
+    }
+
+    .admin-sections {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .bulk-upload-button-container .annotate-button,
+    .add-user-button-container .annotate-button {
+        width: 100%;
+    }
+
+    .modal-content {
+        margin: 10% auto; /* Further reduced margin for smaller screens */
+        width: 95%;
+    }
+
+    .navigation button {
+        width: 120px;
+        height: 45px;
+    }
+
+    .filter-container form {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .filter-container select,
+    .filter-container button.annotate-button {
+        width: 100%;
+    }
+
+    .filter-form {
+        align-items: stretch; /* Ensure elements span full width on mobile */
+    }
+
+    .filter-title {
+        text-align: left; /* Align title to the left on mobile */
+    }
+}
+/* ----------------------------
+   Login Page Styles
+----------------------------- */
+.login-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - var(--header-height)); /* Adjust height to account for header */
+}
+
+.login-container {
+    background: rgba(30, 30, 30, 0.8);
+    padding: 40px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+    width: 100%;
+    max-width: 400px; /* Max width for larger screens */
+}
+
+.login-form h2 {
+    text-align: center;
+    color: var(--primary-color);
+    font-family: var(--font-high-tech);
+    margin-bottom: 20px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 1px solid #555555;
+    border-radius: 5px;
+    background-color: #2c2c2c;
+    color: var(--text-color);
+    font-family: var(--font-primary);
+    font-size: 1rem;
+}
+
+.login-form input::placeholder {
+    color: #888888;
+}
+
+.login-button {
+    width: 100%;
+    padding: 12px 0;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 5px;
+    color: #121212;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s, color 0.3s;
+    font-family: var(--font-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.login-button:hover {
+    background-color: var(--button-hover-color);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.login-button:active {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.error-message {
+    color: var(--error-color); /* Red color for errors */
+    margin-bottom: 15px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* ----------------------------
+   Visually Hidden Class for Accessibility
+----------------------------- */
+.visually-hidden { 
+    position: absolute; 
+    width: 1px; 
+    height: 1px; 
+    padding: 0; 
+    margin: -1px; 
+    overflow: hidden; 
+    clip: rect(0, 0, 0, 0); 
+    white-space: nowrap; 
+    border: 0; 
+}
+/* Existing styles */
+
+/* Dashboard Sidebar Styles */
+.dashboard-sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px; /* Hidden by default */
+    width: 260px;
+    height: 100%;
+    background: linear-gradient(135deg, #0d0d0d, #1a1a1a); /* Gradient background */
+    border-right: 2px solid var(--primary-color);
+    overflow-y: auto;
+    transition: left 0.5s ease-in-out;
+    z-index: 999;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9);
+}
+
+.dashboard-sidebar.open {
+    left: 0;
+    box-shadow: 0 0 15px rgba(var(--primary-color-rgb), 0.7);
+}
+
+.dashboard-content {
+    padding: 20px;
+    color: var(--text-color);
+    font-family: var(--font-primary);
+}
+
+.dashboard-content h2,
+.dashboard-content h3 {
+    color: var(--primary-color);
+    font-family: var(--font-high-tech);
+    margin-bottom: 20px;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(var(--primary-color-rgb), 0.8);
+    animation: glow 2s infinite alternate;
+}
+
+.dashboard-content p {
+    margin: 15px 0;
+    font-size: 1rem;
+    position: relative;
+    padding-left: 30px;
+    color: #ccc;
+}
+
+.dashboard-content p strong {
+    color: var(--primary-color);
+}
+
+.dashboard-content p::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 0 10px rgba(var(--primary-color-rgb), 0.8);
+    animation: pulse 2s infinite;
+}
+
+/* Animations */
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px rgba(var(--primary-color-rgb), 0.8);
+    }
+    to {
+        text-shadow: 0 0 20px rgba(var(--primary-color-rgb), 1);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(-50%) scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+}
+
+.user-stat {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: rgba(255, 165, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 165, 0, 0.2);
+    box-shadow: 0 0 10px rgba(255, 165, 0, 0.2);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.user-stat:hover {
+    background: rgba(255, 165, 0, 0.2);
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.4);
+}
+
+/* Sidebar Toggle Button Styles */
+.sidebar-toggle-button {
+    background: var(--primary-color);
+    border: none;
+    color: #121212;
+    padding: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 0 5px rgba(var(--primary-color-rgb), 0.7);
+    margin-right: 5px; /* Reduced space between button and greeting */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-toggle-button:hover {
+    background-color: var(--button-hover-color);
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(var(--primary-color-rgb), 0.9);
+}
+
+.sidebar-toggle-button:active {
+    transform: scale(1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* ----------------------------
+   Sidebar Styles
+----------------------------- */
+
+.dashboard-sidebar {
+    position: fixed;
+    top: var(--header-height); /* Start below the header */
+    left: -260px; /* Hidden by default */
+    width: 260px;
+    height: calc(100% - var(--header-height)); /* Adjust height to account for header */
+    background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+    border-right: 2px solid var(--primary-color);
+    overflow-y: auto;
+    transition: left 0.5s ease-in-out;
+    z-index: 999;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9);
+}
+
+.dashboard-sidebar.open {
+    left: 0;
+    box-shadow: 0 0 15px rgba(var(--primary-color-rgb), 0.7);
+}
+/* Sticky Container */
+.sticky-container {
+    position: sticky;
+    top: 0; /* Position the sticky container at the top */
+    background-color: #333; /* Dark background color */
+    color: #fff; /* Light text color for contrast */
+    z-index: 1000; /* Ensure it stays on top */
+    padding: 10px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); /* Optional shadow for better visibility */
+}
+
+/* Margin between annotations list and toolbox */
+#annotations-list-container {
+    margin-bottom: 20px; /* Add space between annotations list and the toolbox */
+}
+
+/* Ensure child elements inherit the text color */
+.sticky-container * {
+    color: inherit;
+}
+
+#annotations-list-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.annotation-group {
+    width: 30%;
+    border: 1px solid rgba(var(--primary-color-rgb), 0.3); /* Orange semi-transparent border */
+    background: rgba(30, 30, 30, 0.8); /* Semi-transparent dark grey */
+    backdrop-filter: blur(10px); /* Glassmorphism effect */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    text-align: center; /* Center the heading text */
+}
+
+.annotation-group h3 {
+    color: var(--primary-color); /* Orange color for the heading */
+    font-family: var(--font-high-tech); /* High-tech font */
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px rgba(var(--primary-color-rgb), 0.7), 0 0 20px rgba(var(--primary-color-rgb), 0.5);
+}
+
+.annotation-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.annotation-items li {
+    display: inline-block;
+    width: 100px; /* Adjust width based on your layout */
+    margin: 10px 5px; /* Spacing between list items */
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(30, 30, 30, 0.9); /* Darker background for items */
+    border: 1px solid rgba(var(--primary-color-rgb), 0.3); /* Orange border */
+    text-align: center;
+    font-family: var(--font-primary);
+    color: var(--text-color);
+    box-shadow: 0 0 10px rgba(var(--primary-color-rgb), 0.3);
+    cursor: pointer; /* Change to hand on hover */
+    transition: all 0.3s ease; /* Smooth transitions for hover effects */
+}
+
+.annotation-items li:hover {
+    color: var(--primary-color); /* Orange text on hover */
+    background: rgba(var(--primary-color-rgb), 0.1); /* Slight orange glow */
+    transform: translateY(-2px); /* Slight upward movement */
+    box-shadow: 0 0 15px rgba(var(--primary-color-rgb), 0.6), 0 0 25px rgba(var(--primary-color-rgb), 0.4);
+}
+
+.annotation-items li:active {
+    transform: translateY(0); /* Reset translation on click */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.annotation-items li.selected-annotation {
+    animation: glow 2s infinite alternate; /* Glow effect for selected item */
+}
+
+/* Pulse and glow effects */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px var(--primary-color);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--primary-color);
+    }
+    100% {
+        box-shadow: 0 0 5px var(--primary-color);
+    }
+}
+h1 {
+    font-family: 'Orbitron', sans-serif; /* Futuristic font */
+    font-size: 3rem; /* Large font size */
+    color: var(--primary-color); /* Orange color */
+    text-shadow: 
+        0 0 10px rgba(var(--primary-color-rgb), 0.7), 
+        0 0 20px rgba(var(--primary-color-rgb), 0.5), 
+        0 0 30px rgba(var(--primary-color-rgb), 0.3); /* Glow effect */
+    letter-spacing: 2px; /* Increased letter spacing for a modern look */
+    text-transform: uppercase; /* All caps for a futuristic feel */
+    margin-bottom: 20px; /* Space below */
+    position: relative; /* For pseudo-elements */
+    animation: pulseGlow 2s infinite alternate; /* Subtle pulsing glow */
+    text-align: center; /* Centered alignment */
+    z-index: 1; /* Ensure it stays on top */
+}
+
+/* Optional Glow Animation */
+@keyframes pulseGlow {
+    0% {
+        text-shadow: 0 0 10px rgba(var(--primary-color-rgb), 0.5), 0 0 20px rgba(var(--primary-color-rgb), 0.3);
+    }
+    100% {
+        text-shadow: 0 0 20px rgba(var(--primary-color-rgb), 1), 0 0 30px rgba(var(--primary-color-rgb), 0.8);
+    }
+}
+
+/* Adding a futuristic underline effect */
+h1::before {
+    content: '';
+    position: absolute;
+    bottom: -10px; /* Position it just below the text */
+    left: 50%;
+    width: 60%;
+    height: 4px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+    transform: translateX(-50%); /* Center the underline */
+    box-shadow: 0 0 20px rgba(var(--primary-color-rgb), 0.7), 0 0 40px rgba(var(--primary-color-rgb), 0.5);
+}
+
+/* Adding a subtle glowing flicker effect to the underline */
+@keyframes flicker {
+    0%, 100% {
+        opacity: 0.9;
+        transform: scaleX(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scaleX(1.05);
+    }
+}
+
+/* Apply the flicker effect to the underline */
+h1::before {
+    animation: flicker 3s infinite alternate;
+}
+/* Header Container */
+.header-container {
+    max-width: 100%; /* Take full width */
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* This ensures elements are distributed */
+    position: relative;
+    height: var(--header-height);
+}
+
+/* Left Section: Sidebar and Greeting */
+.header-left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align everything to the left */
+    gap: 10px; /* Adds space between the button and the greeting */
+}
+
+.sidebar-toggle-button {
+    background: var(--primary-color);
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    color: #121212;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-toggle-button:hover {
+    background: var(--button-hover-color);
+    transform: scale(1.1);
+}
+
+.greeting {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    text-shadow: 0 0 10px rgba(var(--primary-color-rgb), 0.7), 0 0 20px rgba(var(--primary-color-rgb), 0.5);
+    font-weight: 500;
+}
+
+/* Center Section: Logo */
+.logo {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    font-family: 'Orbitron', sans-serif;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); /* Center the logo */
+    white-space: nowrap;
+    text-shadow: 0 0 10px rgba(var(--primary-color-rgb), 0.7), 0 0 20px rgba(var(--primary-color-rgb), 0.5);
+}
+
+/* Navigation Links: Positioned to the far right */
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Push nav links to the right */
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    color: var(--text-color);
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+    text-shadow: 0 0 5px rgba(var(--primary-color-rgb), 0.6);
+}
